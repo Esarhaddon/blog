@@ -1,0 +1,5 @@
+// @flow
+
+/*::
+declare export function html(...args: any[]): any
+*/
