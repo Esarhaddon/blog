@@ -26,6 +26,8 @@ export function App() {
                 green 50%, 
                 transparent
               );
+              mask-size: 20px;
+              mask-image: url("data:image/svg+xml,<svg width='125' height='125' viewBox='0 0 125 125' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='72.3569' y='40.5359' width='6' height='47.7738' rx='3' transform='rotate(31.3275 72.3569 40.5359)' fill='black'/></svg>");
             }
           `,
         },
