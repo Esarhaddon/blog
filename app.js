@@ -10,15 +10,31 @@ export function App() {
           language: "css",
           show: true,
           value: `
-            .full-size-square {
-              transform: translateY(calc(50vh - 50%));
-              margin-inline: auto;
-              max-height: 100vh;
-              max-width: 100vw;
+            :root {
+              --graphic-width: 100%;
+            }
+          
+            .resizable {
+              width: var(--graphic-width);
               aspect-ratio: 1;
             }
-
-            .gradient {
+          `,
+        },
+        {
+          language: "css",
+          show: false,
+          value: `
+            .container {
+              transform: translateY(calc(50vh - 50% - 16px));
+              margin-inline: auto;
+              max-width: min(100vw, 100vh - 64px);
+              aspect-ratio: 1;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            
+            .secret-sauce {
               background: radial-gradient(
                 closest-side, 
                 transparent, 
@@ -29,20 +45,35 @@ export function App() {
               mask-size: 20px;
               mask-image: url("data:image/svg+xml,<svg width='125' height='125' viewBox='0 0 125 125' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='72.3569' y='40.5359' width='6' height='47.7738' rx='3' transform='rotate(31.3275 72.3569 40.5359)' fill='black'/></svg>");
             }
+            
+            input {
+              position: fixed;
+              bottom: 16px;
+              left: 0px;
+              right: 0px;
+            }
           `,
         },
         {
           language: "html",
           show: true,
           value: `
-            <div class="full-size-square gradient"></div>
+            <div class="container">
+              <div class="resizable secret-sauce"></div>
+            </div>
+            <input type="range" value="100" min="0" max="100" />
           `,
         },
         {
           language: "js",
           show: true,
           value: `
-            console.log("hello world");
+            const [input] = document.getElementsByTagName("input");
+            const [container] = document.getElementsByClassName("container");      
+      
+            input.addEventListener("input", (e) => {
+              container.style.setProperty("--graphic-width", e.target.value + "%");
+            })
           `,
         },
       ]}
