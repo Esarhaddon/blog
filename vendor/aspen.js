@@ -11,7 +11,7 @@ const INVALID_ARRAY_ITEM =
 const MISSING_ARRAY_ITEM_KEY =
   "[Aspen] Each template in an array must have a key. Pass one like this: html(key)`...`";
 
-const DEBUG = true;
+const DEBUG = false;
 
 function debug(...msg) {
   DEBUG && console.log(...msg);

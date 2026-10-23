@@ -27,7 +27,7 @@ export function App() {
             .container {
               transform: translateY(calc(50vh - 50% - 16px));
               margin-inline: auto;
-              max-width: min(100vw, 100vh - 64px);
+              max-width: min(100vw, 100vh - 32px);
               aspect-ratio: 1;
               display: flex;
               align-items: center;
@@ -48,7 +48,7 @@ export function App() {
             
             input {
               position: fixed;
-              bottom: 16px;
+              bottom: 0px;
               left: 0px;
               right: 0px;
             }

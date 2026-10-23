@@ -1,6 +1,7 @@
 // @flow
 
 import { html, task, signal } from "aspen";
+import { $isMobile } from "../design-tokens.js";
 
 /*::
 type Snippet = {
@@ -76,14 +77,14 @@ export function InteractiveExample(
 
   return html`
     <div
-      style="
+      style=${`
         display: flex;
-        flex-direction: row;
+        flex-direction: ${$isMobile.val ? "column-reverse" : "row"} ;
         gap: 16px;
         border-radius: 4px;
         border: 1px solid #C3C7CB;
         padding: 16px;
-      "
+      `}
     >
       <div
         style="
@@ -103,17 +104,25 @@ export function InteractiveExample(
           )}
       </div>
       <div
-        style="
-          align-self: stretch;
+        style=${`
           background-color: #C3C7CB;
-          margin-block: 16px;
-          width: 1px;
-        "
+          ${
+            $isMobile.val
+              ? `
+                 height: 1px;
+                 margin-inline: 16px;
+               `
+              : `
+                  width: 1px;
+                  margin-block: 16px;
+                `
+          }
+        `}
       ></div>
       <iframe
         style="
           flex: 1;
-          min-width: 0;
+          min-height: 274px;
           border: none;
         "
         id=${iframeId}
