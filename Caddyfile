@@ -79,6 +79,7 @@
         }
       }
     </script>
+    <link rel="stylesheet" href="/global.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/styles/default.min.css"

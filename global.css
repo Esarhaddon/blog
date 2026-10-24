@@ -1,0 +1,47 @@
+/* https://gwfh.mranftl.com/fonts/instrument-serif?subsets=latin */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/static/instrument-serif-v5-latin-regular.woff2") format("woff2");
+}
+
+/* https://gwfh.mranftl.com/fonts/pt-serif?subsets=latin */
+@font-face {
+  font-family: "PT Serif";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/static/pt-serif-v19-latin-regular.woff2") format("woff2");
+}
+
+html,
+body {
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Instrument Serif";
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+p {
+  font-family: "PT Serif";
+}
+
+p > code {
+  font-weight: normal;
+  border: 1px solid green;
+  border-radius: 2px;
+  padding-inline: 3px;
+  color: green;
+}
