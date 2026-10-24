@@ -11,7 +11,7 @@ type Snippet = {
 };
 */
 
-function trimIndent(text /*: string */) {
+export function trimIndent(text /*: string */) {
   const lines = text.split("\n");
   const minIndent = Math.min(
     ...lines

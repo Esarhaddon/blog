@@ -28,65 +28,79 @@
 		file_server
 	}
 
-	redir /index.html /
-
-	# Serve index.html and dynamically generate and insert an importmap of bare
-	# to fingerprinted file names and a list of modulepreload link tags
-	handle / {
+	# Respond with html if "pages" + {path} corresponds to a path in the pages
+	# folder, including an importmap to fingerprint files for caching and
+	# "modulepreload" link tags to flatten the waterfall
+	@page {
+		file pages{path}.js pages{path}index.js pages{path}/index.js
+	}
+	handle @page {
 		header Content-Type text/html
-		header Cache-Control "max-age=0, must-revalidate"
 
-		root ./
+		try_files pages{path}.js pages{path}index.js pages{path}/index.js
 
 		templates
 
 		respond `
-{{- define "parsefile" -}}
-  {{- $visited := .VisitedPaths -}}
-  {{- $path:= .Path -}}
-  {{- $file:= readFile .Path -}}
+      {{- define "parsefile" -}}
+        {{- $visited := .VisitedPaths -}}
+        {{- $path:= .Path -}}
+        {{- $file:= readFile .Path -}}
 
-  {{ if (hasSuffix ".js" $path) }} 
-    {{- $_ := set $visited $path (sha1sum $file) -}}
-  {{ end }}
+        {{- $_ := set $visited $path (sha1sum $file) -}}
 
-  {{- $imports := regexFindAll "(import|export) ([^()/;\"]* from )?(\".*?\\.js\";?)" $file -1 -}}
-  {{- range $imports -}}
-    {{- $importPath:= clean (print (dir $path) "/" (regexReplaceAll "\"" (regexFind "\".*?\"" .) "")) -}}
-    {{- if not (hasKey $visited $importPath) -}}
-      {{- template "parsefile" dict "Path" $importPath "VisitedPaths" $visited -}}
-    {{- end -}}
-  {{- end }}
-{{- end -}}
+        {{- $imports := regexFindAll "(import|export) ([^()/;\"]* from )?(\".*?\\.js\";?)" $file -1 -}}
+        {{- range $imports -}}
+          {{- $importPath:= clean (print (dir $path) "/" (regexReplaceAll "\"" (regexFind "\".*?\"" .) "")) -}}
+          {{- if not (hasKey $visited $importPath) -}}
+            {{- template "parsefile" dict "Path" $importPath "VisitedPaths" $visited -}}
+          {{- end -}}
+        {{- end }}
+      {{- end -}}
 
-{{- $visitedPaths := dict -}}
-{{- template "parsefile" dict "Path" "index.html" "VisitedPaths" $visitedPaths -}}
-{{- $keys := (keys $visitedPaths) | sortAlpha -}}
+      {{- $visitedPaths := dict -}}
+      {{- template "parsefile" dict "Path" (ph "http.request.uri.path") "VisitedPaths" $visitedPaths -}}
+      {{- $keys := (keys $visitedPaths) | sortAlpha -}}
+      {{- $backtick := printf "%c" 96 -}}
 
-{{- range $index, $part := (splitList "<head>" (readFile "./index.html")) -}}
-{{- $part -}}
-<head>
-  {{- if eq $index 0}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="importmap">
       {
         "imports": {
-           "aspen": "/vendor/aspen.{{ (sha1sum (readFile "/vendor/aspen.js" )) }}.js",
+          {{- range listFiles "/vendor" }}
+          "{{ trimSuffix ".js" . }}": "/vendor/{{ trimSuffix ".js" . }}.{{ sha1sum (readFile (print "/vendor/" .)) }}.js",
+          {{- end }}
           {{- range $index, $key := $keys }}
           "/{{ . }}": "/{{trimSuffix ".js" $key}}.{{ get $visitedPaths $key }}.js"{{ if ne $index (sub (len $keys) 1) }},{{ end }}
           {{- end }}
         }
       }
     </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/styles/default.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.12.0/build/highlight.min.js"></script>
+    {{- range listFiles "/vendor" }}
+    <link rel="modulepreload" href="/vendor/{{ trimSuffix ".js" . }}.{{ sha1sum (readFile (print "/vendor/" .)) }}.js" />
+    {{- end }}
     {{- range $keys }}
     <link rel="modulepreload" href="/{{ trimSuffix ".js" . }}.{{ get $visitedPaths . }}.js" />
-    {{- end -}}
-    {{- range (listFiles "/static") }}
-      {{- if (hasSuffix ".css" .) -}}
-      <link rel="stylesheet" href="/static/{{ trimSuffix ".css" . }}.{{ sha1sum (readFile (printf "static/%s" . )) }}.css" />
-      {{- else if (hasSuffix ".woff2" .) -}}
-      <link rel="preload" href="/static/{{ . }}" as="font" type="font/woff2" crossorigin />
-      {{- end -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}`
+    {{- end }}
+  <script type="module">
+    import { createRoot, html } from "aspen"
+    import * as app from "/{{ ph "http.request.uri.path" }}"
+    
+    const root = createRoot(document.getElementById("root"), app)
+    root.render(html{{ $backtick }}<Page />{{ $backtick }})
+  </script>
+  </head>
+  <body>
+    <div id="root">loading...</div>
+  </body>
+</html>`
 	}
+}
