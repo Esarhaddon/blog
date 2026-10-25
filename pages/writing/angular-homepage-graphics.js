@@ -1,7 +1,9 @@
 import { html } from "aspen";
 
 export * as InteractiveExample from "../../components/interactive-example.js";
+
 import { trimIndent } from "../../components/interactive-example.js";
+import { $isMobile } from "../../design-tokens.js";
 
 const maskImage = `data:image/svg+xml,<svg width='125' height='125' viewBox='0 0 125 125' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='72.3569' y='40.5359' width='6' height='47.7738' rx='3' transform='rotate(31.3275 72.3569 40.5359)' fill='black'/></svg>`;
 
@@ -56,7 +58,8 @@ export function Page() {
             }
             
             /*
-            NOTE: keep reading for the CSS that makes this work
+            NOTE: keep reading for the CSS
+            that makes this work
             */
             .resizable {
               width: var(--graphic-width);
@@ -100,7 +103,7 @@ export function Page() {
         },
         {
           language: "html",
-          show: true,
+          show: false,
           value: `
             <div class="container">
               <div class="resizable secret-sauce"></div>
@@ -110,7 +113,7 @@ export function Page() {
         },
         {
           language: "js",
-          show: true,
+          show: false,
           value: `
             const [input] = document.getElementsByTagName("input");
             const [container] = document.getElementsByClassName("container");      

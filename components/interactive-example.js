@@ -53,7 +53,7 @@ export function InteractiveExample(
                 padding: 0;
                 margin: 0;
               }
-
+          
               ${$snippets.val
                 .filter((snippet) => snippet.language === "css")
                 .map((snippet) => snippet.value)
@@ -79,54 +79,65 @@ export function InteractiveExample(
     <div
       style=${`
         display: flex;
-        flex-direction: ${$isMobile.val ? "column-reverse" : "row"} ;
-        gap: 16px;
-        border-radius: 4px;
-        border: 1px solid #C3C7CB;
-        padding: 16px;
+        justify-content: center;
       `}
     >
       <div
-        style="
-          flex: 1;
+        style=${`
+          box-sizing: border-box;
+          max-width: calc(100vw - 24px);
+          flex-shrink: 0;
+          width: calc(100% + 64px);
           display: flex;
-          flex-direction: column;
+          flex-direction: ${$isMobile.val ? "column-reverse" : "row"} ;
           gap: 16px;
-          min-width: 0;
-        "
+          border-radius: 4px;
+          border: 1px solid #C3C7CB;
+          padding: 16px;
+        `}
       >
-        ${$snippets.val
-          .filter((snippet) => snippet.show)
-          .map(
-            (snippet, i) => html(Symbol())`
+        <div
+          style="
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-width: 0;
+          "
+        >
+          ${$snippets.val
+            .filter((snippet) => snippet.show)
+            .map(
+              (snippet, i) => html(Symbol())`
               <Snippet $snippet=${snippet}/>
             `,
-          )}
+            )}
+        </div>
+        <div
+          style=${`
+            background-color: #C3C7CB;
+            ${
+              $isMobile.val
+                ? `
+                   height: 1px;
+                   margin-inline: 16px;
+                 `
+                : `
+                    width: 1px;
+                    margin-block: 16px;
+                  `
+            }
+          `}
+        ></div>
+        <iframe
+          style=${`
+            flex: 1;
+            min-height: ${$isMobile.val ? "274px" : 0};
+            border: none;
+          `}
+          id=${iframeId}
+        ></iframe>
       </div>
-      <div
-        style=${`
-          background-color: #C3C7CB;
-          ${
-            $isMobile.val
-              ? `
-                 height: 1px;
-                 margin-inline: 16px;
-               `
-              : `
-                  width: 1px;
-                  margin-block: 16px;
-                `
-          }
-        `}
-      ></div>
-      <iframe
-        style="
-          flex: 1;
-          min-height: 274px;
-          border: none;
-        "
-        id=${iframeId}
-      ></iframe>
     </div>
   `;
 }
@@ -139,7 +150,7 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
   const { val: codeId } = signal(Math.random() * 1_000_000);
 
   const lineHeight = 19;
-  const fontSize = 16;
+  const fontSize = 14;
   const padding = 16;
 
   // TODO: add support for controlling textareas with signals
