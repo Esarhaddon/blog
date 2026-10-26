@@ -87,7 +87,7 @@ export function InteractiveExample(
           box-sizing: border-box;
           max-width: calc(100vw - 24px);
           flex-shrink: 0;
-          width: calc(100% + 64px);
+          width: 100%;
           display: flex;
           flex-direction: ${$isMobile.val ? "column-reverse" : "row"} ;
           gap: 16px;

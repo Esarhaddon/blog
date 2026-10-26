@@ -1,6 +1,7 @@
 import { html } from "aspen";
 
 export * as InteractiveExample from "../../components/interactive-example.js";
+export * as Navigation from "../../components/navigation.js";
 
 import { trimIndent } from "../../components/interactive-example.js";
 import { $isMobile } from "../../design-tokens.js";
@@ -9,6 +10,7 @@ const maskImage = `data:image/svg+xml,<svg width='125' height='125' viewBox='0 0
 
 export function Page() {
   return html`
+    <Navigation />
     <h1>
       Understanding the cool background graphics on the Angular docs homepage
     </h1>
