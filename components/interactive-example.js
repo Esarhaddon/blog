@@ -53,7 +53,7 @@ export function InteractiveExample(
                 padding: 0;
                 margin: 0;
               }
-          
+
               ${$snippets.val
                 .filter((snippet) => snippet.language === "css")
                 .map((snippet) => snippet.value)
@@ -64,11 +64,11 @@ export function InteractiveExample(
             ${$snippets.val
               .filter((snippet) => snippet.language === "html")
               .map((snippet) => snippet.value)
-              .join("\n\n")}
+              .join("\n")}
             ${$snippets.val
               .filter((snippet) => snippet.language === "js")
               .map((snippet) => `<script>${snippet.value}</script>`)
-              .join("\n\n")}
+              .join("\n")}
           </body>
         </html>
       `);
@@ -184,6 +184,17 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
         overflow-x: scroll;
       `}
     >
+      <div
+        style="
+          font-family: Inter;
+          font-size: .865rem;
+          color: gray;
+          margin-left: 16px;
+          margin-top: 16px;
+        "
+      >
+        ${$snippet.language.toUpperCase()}
+      </div>
       <div
         style=${`
           position: relative; 
