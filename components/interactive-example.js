@@ -189,8 +189,8 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           font-family: Inter;
           font-size: .865rem;
           color: gray;
-          margin-left: 16px;
           margin-top: 16px;
+          margin-left: 16px;
         "
       >
         ${$snippet.language.toUpperCase()}

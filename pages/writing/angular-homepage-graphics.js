@@ -11,14 +11,27 @@ const maskImage = `data:image/svg+xml,<svg width='125' height='125' viewBox='0 0
 export function Page() {
   return html`
     <Navigation />
-    <h1>
-      Understanding the cool background graphics on the Angular docs homepage
+    <h1
+      style="
+        margin-bottom: 12px;
+      "
+    >
+      Understanding the background graphics on the Angular docs homepage
     </h1>
+    <span
+      style="
+        font-family: Inter;
+        font-size: .865rem;
+        color: gray;
+        flex-shrink: 0;
+      "
+    >
+      October 29, 2026
+    </span>
     <p>
-      I’ve never actually built anything with Angular, but the other day I was
-      checking out the <a href="https://angular.dev/">homepage</a> for the
-      Angular docs and noticed some cool graphics that show up behind the page
-      content.
+      The other day I was checking out the
+      <a href="https://angular.dev/">homepage</a> for the Angular docs and
+      noticed some cool graphics that show up behind the page content.
     </p>
     <p>
       <strong>

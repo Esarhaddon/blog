@@ -4,7 +4,7 @@ import { html } from "aspen";
 
 import { $isMobile } from "../design-tokens.js";
 
-const NAV_ITEMS = [
+const LINKS = [
   { href: "/", text: "About" },
   { href: "/writing", text: "Writing" },
   { href: "/aspen", text: "Aspen" },
@@ -21,7 +21,7 @@ export function Navigation() {
         margin-top: ${$isMobile.val ? "12px" : "1.5rem"};
       `}
     >
-      ${NAV_ITEMS.map(
+      ${LINKS.map(
         (item) => html(item.href)`
           <Link href=${item.href}>
             ${item.text}
