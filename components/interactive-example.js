@@ -3,10 +3,14 @@
 import { html, task, signal } from "aspen";
 import { $isMobile } from "../design-tokens.js";
 
+export * as WrapTextIcon from "./wrap-text-icon.js";
+export * as NoWrapTextIcon from "./no-wrap-text.js";
+
 /*::
 type Snippet = {
   language: "css" | "js" | "html",
   show: boolean,
+  wrapped: boolean,
   value: string,
 };
 */
@@ -32,6 +36,7 @@ export function InteractiveExample(
   const $snippets = signal(
     snippets.map((snippet) => ({
       ...snippet,
+      wrapped: false,
       value: trimIndent(snippet.value),
     })),
   );
@@ -144,6 +149,7 @@ export function InteractiveExample(
 
 export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
   const $textareaInitialized = signal(false);
+  // const $wrapText = signal(true);
 
   // TODO: you need some kind of ref mechanism
   const { val: textareaId } = signal(Math.random() * 1_000_000);
@@ -170,12 +176,18 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
     const codeElement = document.getElementById(codeId);
 
     if (codeElement) {
-      codeElement.innerHTML = hljs.highlight($snippet.value, {
-        language: $snippet.language,
-      }).value;
+      codeElement.innerHTML = hljs.highlight(
+        // Add a trailing space to prevent trailing line breaks from being
+        // truncated
+        $snippet.value + ($snippet.value.endsWith("\n") ? " " : ""),
+        {
+          language: $snippet.language,
+        },
+      ).value;
     }
   });
 
+  // TODO: add some sandboxing
   return html`
     <div
       style=${`
@@ -186,26 +198,53 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
     >
       <div
         style="
-          font-family: Inter;
-          font-size: .865rem;
-          color: gray;
-          margin-top: 16px;
-          margin-left: 16px;
+          position: sticky;
+          left: 0;
+          display: flex;
+          justify-content: space-between;
+          padding-inline: 16px;
+          padding-top: 16px;
         "
       >
-        ${$snippet.language.toUpperCase()}
+        <div
+          style="
+            font-family: Inter;
+            font-size: .865rem;
+            color: gray;
+          "
+        >
+          ${$snippet.language.toUpperCase()}
+        </div>
+        <button
+          style="
+            all: unset;
+            cursor: pointer;
+          "
+          onClick=${() => ($snippet.wrapped = !$snippet.wrapped)}
+        >
+          ${$snippet.wrapped
+            ? html`<WrapTextIcon />`
+            : html`<NoWrapTextIcon />`}
+        </button>
       </div>
       <div
         style=${`
           position: relative; 
           min-width: fit-content;
-          height: ${(($snippet.value.match(/\n/g)?.length || 0) + 1) * lineHeight + 2 * padding}px;
         `}
       >
         <pre
           style=${`
             margin: 0; 
             padding: ${padding}px;
+            ${
+              $snippet.wrapped
+                ? `
+              white-space: pre-wrap;
+              word-break: break-all;
+            `
+                : ""
+            }
           `}
         ><code 
           id=${codeId} 
@@ -218,8 +257,7 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           id=${textareaId}
           oninput=${(e /*: InputEvent */) => {
             if (e.target instanceof HTMLTextAreaElement) {
-              const target = e.target;
-              $snippet.value = target.value;
+              $snippet.value = e.target.value;
             }
           }}
           style=${`
@@ -231,6 +269,7 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
             caret-color: black;
             border: none;
             color: transparent;
+            word-break: break-all;
             background: transparent;
             position: absolute;
             top: 0;

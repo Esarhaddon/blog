@@ -82,10 +82,10 @@ p {
 
 p > code {
   font-weight: normal;
-  border: 1px solid green;
+  border: 1px solid gray;
   border-radius: 2px;
   padding-inline: 3px;
-  color: green;
+  color: gray;
   font-size: 0.8rem;
 }
 

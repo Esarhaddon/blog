@@ -73,8 +73,7 @@ export function Page() {
             }
             
             /*
-            NOTE: keep reading for the CSS
-            that makes this work
+            NOTE: keep reading for the CSS that makes this work
             */
             .resizable {
               width: var(--graphic-width);
@@ -128,7 +127,7 @@ export function Page() {
         },
         {
           language: "js",
-          show: false,
+          show: true,
           value: `
             const [input] = document.getElementsByTagName("input");
             const [container] = document.getElementsByClassName("container");      
