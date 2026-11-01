@@ -5,6 +5,7 @@ import { $isMobile } from "../design-tokens.js";
 
 export * as WrapTextIcon from "./wrap-text-icon.js";
 export * as NoWrapTextIcon from "./no-wrap-text.js";
+export * as RefreshIcon from "./refresh-icon.js";
 
 /*::
 type Snippet = {
@@ -37,6 +38,7 @@ export function InteractiveExample(
     snippets.map((snippet) => ({
       ...snippet,
       wrapped: false,
+      initialValue: trimIndent(snippet.value),
       value: trimIndent(snippet.value),
     })),
   );
@@ -113,9 +115,9 @@ export function InteractiveExample(
           ${$snippets.val
             .filter((snippet) => snippet.show)
             .map(
-              (snippet, i) => html(Symbol())`
-              <Snippet $snippet=${snippet}/>
-            `,
+              (snippet) => html(Symbol())`
+                 <Snippet $snippet=${snippet} />
+              `,
             )}
         </div>
         <div
@@ -149,7 +151,6 @@ export function InteractiveExample(
 
 export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
   const $textareaInitialized = signal(false);
-  // const $wrapText = signal(true);
 
   // TODO: you need some kind of ref mechanism
   const { val: textareaId } = signal(Math.random() * 1_000_000);
@@ -215,17 +216,37 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
         >
           ${$snippet.language.toUpperCase()}
         </div>
-        <button
-          style="
-            all: unset;
-            cursor: pointer;
-          "
-          onClick=${() => ($snippet.wrapped = !$snippet.wrapped)}
-        >
-          ${$snippet.wrapped
-            ? html`<WrapTextIcon />`
-            : html`<NoWrapTextIcon />`}
-        </button>
+        <div>
+          ${$snippet.initialValue !== $snippet.value
+            ? html`
+                <button
+                  style="
+                    all: unset;
+                    cursor: pointer;
+                    transform: scaleX(-1); 
+                  "
+                  onClick=${() => {
+                    const textarea = document.getElementById(textareaId);
+                    textarea.value = $snippet.initialValue;
+                    $snippet.value = $snippet.initialValue;
+                  }}
+                >
+                  <RefreshIcon />
+                </button>
+              `
+            : null}
+          <button
+            style="
+              all: unset;
+              cursor: pointer;
+            "
+            onClick=${() => ($snippet.wrapped = !$snippet.wrapped)}
+          >
+            ${$snippet.wrapped
+              ? html`<WrapTextIcon />`
+              : html`<NoWrapTextIcon />`}
+          </button>
+        </div>
       </div>
       <div
         style=${`
