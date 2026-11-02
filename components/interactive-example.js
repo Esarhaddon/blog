@@ -197,6 +197,13 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
         overflow-x: scroll;
       `}
     >
+      <style>
+        @scope {
+          &:has(textarea:focus) {
+            outline: 1px solid blue;
+          }
+        }
+      </style>
       <div
         style="
           position: sticky;
@@ -283,6 +290,7 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           }}
           style=${`
             resize: none;
+            outline: none;
             font-family: monospace;
             font-size: ${fontSize}px;
             line-height: ${lineHeight}px;
