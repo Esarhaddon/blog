@@ -6,7 +6,7 @@ export * as Navigation from "../../components/navigation.js";
 const POSTS = [
   {
     href: "/writing/angular-homepage-graphics",
-    title: "Understanding the background graphics on the Angular docs homepage",
+    title: "How to make the background graphics on the Angular docs homepage",
     date: "October 29, 2026",
   },
   {
@@ -24,7 +24,7 @@ export function Page() {
         max-width: 800px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 12px;
       "
     >
       ${POSTS.map(
@@ -50,7 +50,7 @@ export function Post({ title, href, date }) {
       <h2
         style="
           margin-bottom: 12px;
-          font-size: 2.5rem;
+          font-size: 1.8rem;
         "
       >
         ${title}
