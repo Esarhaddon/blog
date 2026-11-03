@@ -8,6 +8,7 @@ import { $isMobile } from "../../design-tokens.js";
 
 const maskImage = `data:image/svg+xml,<svg width='125' height='125' viewBox='0 0 125 125' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='72.3569' y='40.5359' width='6' height='47.7738' rx='3' transform='rotate(31.3275 72.3569 40.5359)' fill='black'/></svg>`;
 
+// TODO: Add Inter bold font weight
 export function Page() {
   return html`
     <Navigation />
@@ -16,7 +17,7 @@ export function Page() {
         margin-bottom: 12px;
       "
     >
-      Understanding the background graphics on the Angular docs homepage
+      How to make the background graphics on the Angular docs homepage
     </h1>
     <span
       style="
@@ -86,9 +87,9 @@ export function Page() {
           show: false,
           value: `
             .container {
-              transform: translateY(calc(50vh - 50% - 16px));
+              transform: translateY(calc(50vh - 50% - 8px));
               margin-inline: auto;
-              max-width: min(100vw, 100vh - 32px);
+              max-width: min(100vw, 100vh - 56px);
               aspect-ratio: 1;
               display: flex;
               align-items: center;
@@ -106,12 +107,20 @@ export function Page() {
               mask-size: 20px;
               mask-image: url("${maskImage}");
             }
-            
+
+
             input {
+              flex: 1;
+            }
+
+            .input-container {
+              display: flex;
               position: fixed;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              padding-inline: 16px;
+              padding-bottom: 8px;
             }
           `,
         },
@@ -122,12 +131,14 @@ export function Page() {
             <div class="container">
               <div class="resizable secret-sauce"></div>
             </div>
+            <div class="input-container">
             <input type="range" value="100" min="0" max="100" />
+            </div>
           `,
         },
         {
           language: "js",
-          show: true,
+          show: false,
           value: `
             const [input] = document.getElementsByTagName("input");
             const [container] = document.getElementsByClassName("container");      

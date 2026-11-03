@@ -97,10 +97,7 @@ export function InteractiveExample(
           width: 100%;
           display: flex;
           flex-direction: ${$isMobile.val ? "column-reverse" : "row"} ;
-          gap: 16px;
-          border-radius: 4px;
           border: 1px solid #C3C7CB;
-          padding: 16px;
         `}
       >
         <div
@@ -108,34 +105,17 @@ export function InteractiveExample(
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 16px;
             min-width: 0;
           "
         >
           ${$snippets.val
             .filter((snippet) => snippet.show)
             .map(
-              (snippet) => html(Symbol())`
-                 <Snippet $snippet=${snippet} />
+              (snippet, i) => html(Symbol())`
+                 <Snippet $snippet=${snippet} index=${i} />
               `,
             )}
         </div>
-        <div
-          style=${`
-            background-color: #C3C7CB;
-            ${
-              $isMobile.val
-                ? `
-                   height: 1px;
-                   margin-inline: 16px;
-                 `
-                : `
-                    width: 1px;
-                    margin-block: 16px;
-                  `
-            }
-          `}
-        ></div>
         <iframe
           style=${`
             flex: 1;
@@ -149,13 +129,17 @@ export function InteractiveExample(
   `;
 }
 
-export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
+export function Snippet(
+  { $snippet, index } /*: { $snippet:  Snippet, index: number } */,
+) {
   const $textareaInitialized = signal(false);
 
   // TODO: you need some kind of ref mechanism
   const { val: textareaId } = signal(Math.random() * 1_000_000);
   const { val: codeId } = signal(Math.random() * 1_000_000);
 
+  const lineNumberWidth =
+    Math.ceil(($snippet.value.split("\n").length + 1) / 10) + "ch";
   const lineHeight = 19;
   const fontSize = 14;
   const padding = 16;
@@ -177,14 +161,41 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
     const codeElement = document.getElementById(codeId);
 
     if (codeElement) {
-      codeElement.innerHTML = hljs.highlight(
-        // Add a trailing space to prevent trailing line breaks from being
-        // truncated
-        $snippet.value + ($snippet.value.endsWith("\n") ? " " : ""),
-        {
-          language: $snippet.language,
-        },
-      ).value;
+      codeElement.innerHTML = hljs
+        .highlight(
+          // Add a trailing space to prevent trailing line breaks from being
+          // truncated
+          $snippet.value + ($snippet.value.endsWith("\n") ? " " : ""),
+          {
+            language: $snippet.language,
+          },
+        )
+        .value.split("\n")
+        .map(
+          (line, i) =>
+            `<span 
+              style="
+                z-index: 1;
+                position: sticky;
+                left: calc(${lineNumberWidth} + ${padding + 8}px);
+                display: inline-block;
+                width: 0;
+                height: 0;
+                white-space: nowrap;
+              "
+            ><div
+              style="
+                font-size: ${fontSize}px;
+                line-height: ${lineHeight}px;
+                position: absolute;
+                top: -1em;
+                right: ${padding / 2 + 8}px;
+                white-space: nowrap;
+                color: #585858;
+              "
+            >${i + 1}</div></span>` + line,
+        )
+        .join("\n");
     }
   });
 
@@ -192,18 +203,16 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
   return html`
     <div
       style=${`
-        border: 1px solid #C3C7CB;
-        border-radius: 4px;
+        ${
+          $isMobile.val
+            ? index === 0
+              ? `border-top: 1px solid #C3C7CB;`
+              : ""
+            : `border-right: 1px solid #C3C7CB;`
+        }
         overflow-x: scroll;
       `}
     >
-      <style>
-        @scope {
-          &:has(textarea:focus) {
-            outline: 1px solid blue;
-          }
-        }
-      </style>
       <div
         style="
           position: sticky;
@@ -257,14 +266,41 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
       </div>
       <div
         style=${`
-          position: relative; 
+          position: relative;
+          display: flex;
           min-width: fit-content;
+          min-height: 125px;
         `}
       >
+        <div
+          style="
+            z-index: 1;
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 0;
+          "
+        >
+          <div
+            style=${`
+              background-color: gainsboro;
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              width: calc(${lineNumberWidth} + 16px);
+            `}
+          ></div>
+        </div>
         <pre
           style=${`
-            margin: 0; 
+            margin: 0;
+            min-width: 100%;
+            box-sizing: border-box;
             padding: ${padding}px;
+            padding-left: calc(${padding + 8}px + ${lineNumberWidth});
+            font-size: ${fontSize}px; 
+            background-color: whitesmoke;
             ${
               $snippet.wrapped
                 ? `
@@ -276,7 +312,9 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           `}
         ><code 
           id=${codeId} 
-          style=${`background: none;
+          style=${`
+            background: none;
+            font-family: monospace;
             font-size: ${fontSize}px; 
             line-height: ${lineHeight}px;
           `}
@@ -295,6 +333,7 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
             font-size: ${fontSize}px;
             line-height: ${lineHeight}px;
             padding: ${padding}px;
+            padding-left: calc(${padding + 8}px + ${lineNumberWidth});
             caret-color: black;
             border: none;
             color: transparent;
