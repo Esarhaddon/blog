@@ -127,7 +127,7 @@ export function Page() {
         },
         {
           language: "js",
-          show: true,
+          show: false,
           value: `
             const [input] = document.getElementsByTagName("input");
             const [container] = document.getElementsByClassName("container");      
@@ -141,10 +141,10 @@ export function Page() {
     />
     <p>
       Notice that when you resize the graphic, either with the range input or by
-      setting the <code>--graphic-width</code> CSS variable directly, the number
-      of visible tick marks changes, causing the pattern as a whole to grow or
-      shrink, but each individual tick mark stays the same size. That’s not
-      something you can do with a regular image.
+      setting the <code>--graphic-width;</code> CSS variable directly, the
+      number of visible tick marks changes, causing the pattern as a whole to
+      grow or shrink, but each individual tick mark stays the same size. That’s
+      not something you can do with a regular image.
     </p>
   `;
 }
