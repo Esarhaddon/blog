@@ -45,30 +45,11 @@ export function Link(
       style=${`
         text-decoration: none;
         font-family: Inter;
-        font-size: 0.96rem;
-        text-box-trim: trim-both;
-        color: ${isActive ? "green" : "gray"};
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        letter-spacing: 3%;
+        color: ${isActive ? "#484848" : "#36c"};
       `}
       href=${href}
     >
       ${children}
-      ${isActive
-        ? html`
-            <div
-              style="
-                border-radius: 3px;
-                width: 5px;
-                height: 5px;
-                background-color: green;
-              "
-            ></div>
-          `
-        : null}
     </a>
   `;
 }

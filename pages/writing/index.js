@@ -50,7 +50,7 @@ export function Post({ title, href, date }) {
       <h2
         style="
           margin-bottom: 12px;
-          font-size: 2.5rem;
+          font-size: 1.8rem;
         "
       >
         ${title}

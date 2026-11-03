@@ -49,18 +49,23 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Instrument Serif";
+  font-family: Inter;
   font-weight: normal;
   margin-block: 0.67em;
   color: #484848;
 }
 
+/* h1 { */
+/*   font-size: 2.5rem; */
+/* } */
+
 h1 {
-  font-size: 2.5rem;
+  font-weight: 400;
+  font-size: 1.8rem;
 }
 
 p {
-  font-family: "PT Serif";
+  font-family: Inter;
   line-height: 1.8;
   font-size: 1rem;
   margin-block: 1.75em;
@@ -79,16 +84,16 @@ p {
 
 p > code {
   font-weight: normal;
-  color: green;
   font-size: 0.95rem;
   word-break: keep-all;
+  background-color: whitesmoke;
 }
 
 a {
-  color: green;
-  text-decoration: none;
+  color: #36c;
 }
 
 strong {
   font-weight: 700;
+  letter-spacing: -0.085%;
 }
