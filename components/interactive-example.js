@@ -97,10 +97,7 @@ export function InteractiveExample(
           width: 100%;
           display: flex;
           flex-direction: ${$isMobile.val ? "column-reverse" : "row"} ;
-          gap: 16px;
-          border-radius: 4px;
           border: 1px solid #C3C7CB;
-          padding: 16px;
         `}
       >
         <div
@@ -108,7 +105,6 @@ export function InteractiveExample(
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 16px;
             min-width: 0;
           "
         >
@@ -120,22 +116,6 @@ export function InteractiveExample(
               `,
             )}
         </div>
-        <div
-          style=${`
-            background-color: #C3C7CB;
-            ${
-              $isMobile.val
-                ? `
-                   height: 1px;
-                   margin-inline: 16px;
-                 `
-                : `
-                    width: 1px;
-                    margin-block: 16px;
-                  `
-            }
-          `}
-        ></div>
         <iframe
           style=${`
             flex: 1;
@@ -192,8 +172,11 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
   return html`
     <div
       style=${`
-        border: 1px solid #C3C7CB;
-        border-radius: 4px;
+        ${
+          $isMobile.val
+            ? `border-bottom: 1px solid #C3C7CB;`
+            : `border-right: 1px solid #C3C7CB;`
+        }
         overflow-x: scroll;
       `}
     >

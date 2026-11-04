@@ -127,7 +127,7 @@ export function Page() {
         },
         {
           language: "js",
-          show: false,
+          show: true,
           value: `
             const [input] = document.getElementsByTagName("input");
             const [container] = document.getElementsByClassName("container");      
