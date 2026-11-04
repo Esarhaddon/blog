@@ -49,6 +49,14 @@ export function Link(
       `}
       href=${href}
     >
+      <style>
+        @scope {
+          :scope:hover {
+            color: red;
+            text-decoration: underline !important;
+          }
+        }
+      </style>
       ${children}
     </a>
   `;
