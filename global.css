@@ -97,3 +97,18 @@ strong {
   font-weight: 700;
   letter-spacing: -0.085%;
 }
+
+span.line-number {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 1em;
+  white-space: nowrap;
+}
+
+span.line-number > div {
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  right: 8px;
+}

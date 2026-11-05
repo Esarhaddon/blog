@@ -157,14 +157,21 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
     const codeElement = document.getElementById(codeId);
 
     if (codeElement) {
-      codeElement.innerHTML = hljs.highlight(
-        // Add a trailing space to prevent trailing line breaks from being
-        // truncated
-        $snippet.value + ($snippet.value.endsWith("\n") ? " " : ""),
-        {
-          language: $snippet.language,
-        },
-      ).value;
+      codeElement.innerHTML = hljs
+        .highlight(
+          // Add a trailing space to prevent trailing line breaks from being
+          // truncated
+          $snippet.value + ($snippet.value.endsWith("\n") ? " " : ""),
+          {
+            language: $snippet.language,
+          },
+        )
+        .value.split("\n")
+        .map(
+          (line, i) =>
+            `<span class="line-number"><div>${i + 1}</div></span>` + line,
+        )
+        .join("\n");
     }
   });
 
@@ -248,11 +255,12 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           style=${`
             margin: 0; 
             padding: ${padding}px;
+            padding-left: calc(${padding}px + 10px);
             ${
               $snippet.wrapped
                 ? `
               white-space: pre-wrap;
-              word-break: break-all;
+              word-break: break-word;
             `
                 : ""
             }
@@ -278,10 +286,11 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
             font-size: ${fontSize}px;
             line-height: ${lineHeight}px;
             padding: ${padding}px;
+            padding-left: calc(${padding}px + 10px);
             caret-color: black;
             border: none;
-            color: transparent;
-            word-break: break-all;
+            color: red;
+            word-break: break-word;
             background: transparent;
             position: absolute;
             top: 0;
