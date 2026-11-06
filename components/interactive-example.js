@@ -136,6 +136,8 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
   const { val: textareaId } = signal(Math.random() * 1_000_000);
   const { val: codeId } = signal(Math.random() * 1_000_000);
 
+  const lineNumberWidth =
+    Math.ceil(($snippet.value.split("\n").length + 1) / 10) + "ch";
   const lineHeight = 19;
   const fontSize = 14;
   const padding = 16;
@@ -174,6 +176,8 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
         .join("\n");
     }
   });
+
+  // DEV: what's up with the font family? why is the textarea different?
 
   // TODO: add some sandboxing
   return html`
@@ -255,7 +259,8 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           style=${`
             margin: 0; 
             padding: ${padding}px;
-            padding-left: calc(${padding}px + 10px);
+            padding-left: calc(${padding}px + ${lineNumberWidth});
+            font-size: ${fontSize}px; 
             ${
               $snippet.wrapped
                 ? `
@@ -267,7 +272,9 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
           `}
         ><code 
           id=${codeId} 
-          style=${`background: none;
+          style=${`
+            background: none;
+            font-family: monospace;
             font-size: ${fontSize}px; 
             line-height: ${lineHeight}px;
           `}
@@ -286,7 +293,7 @@ export function Snippet({ $snippet } /*: { $snippet:  Snippet } */) {
             font-size: ${fontSize}px;
             line-height: ${lineHeight}px;
             padding: ${padding}px;
-            padding-left: calc(${padding}px + 10px);
+            padding-left: calc(${padding}px + ${lineNumberWidth});
             caret-color: black;
             border: none;
             color: red;
